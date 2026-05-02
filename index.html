@@ -809,6 +809,146 @@
       padding: 60px 20px;
       font-size: 14px;
     }
+
+    /* 提示词标签样式 */
+    .prompt-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+      align-items: center;
+    }
+
+    .prompt-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-right: 4px;
+    }
+
+    .prompt-tag {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      color: var(--accent);
+      padding: 6px 12px;
+      border-radius: 16px;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .prompt-tag:hover {
+      background: var(--accent);
+      color: #1a1a1a;
+      transform: translateY(-1px);
+    }
+
+    /* 手相说明弹窗 */
+    .palmistry-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      background: rgba(0, 0, 0, 0.85);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(5px);
+    }
+
+    .palmistry-modal.show {
+      display: flex;
+    }
+
+    .palmistry-content {
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .palmistry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .palmistry-header h4 {
+      margin: 0;
+      color: var(--accent);
+      font-size: 16px;
+    }
+
+    .palmistry-close {
+      background: none;
+      border: none;
+      color: #aaa;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .palmistry-close:hover {
+      color: #fff;
+    }
+
+    .palmistry-body {
+      color: var(--text-main);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .palmistry-body p {
+      margin: 0 0 12px 0;
+    }
+
+    .palmistry-body ul {
+      margin: 0;
+      padding-left: 20px;
+    }
+
+    .palmistry-body li {
+      margin-bottom: 8px;
+    }
+
+    .palmistry-body .tip {
+      background: rgba(212, 175, 55, 0.1);
+      border-left: 3px solid var(--accent);
+      padding: 10px 12px;
+      margin-top: 12px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+    }
+
+    .palmistry-footer {
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .palmistry-btn {
+      background: var(--accent);
+      color: #1a1a1a;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .palmistry-btn:hover {
+      filter: brightness(1.1);
+    }
   </style>
 </head>
 
@@ -826,6 +966,15 @@
 
       <div>
         <label>创意描述 (Prompt)</label>
+        <div class="prompt-tags">
+          <span class="prompt-label">快速选择：</span>
+          <button class="prompt-tag" onclick="fillPrompt('palmistry')">🔮 手相</button>
+          <button class="prompt-tag" onclick="fillPrompt('beauty')">👩 美女</button>
+          <button class="prompt-tag" onclick="fillPrompt('meituan')">🍔 美团海报</button>
+          <button class="prompt-tag" onclick="fillPrompt('landscape')">🏞️ 风景</button>
+          <button class="prompt-tag" onclick="fillPrompt('cartoon')">🎨 卡通</button>
+          <button class="prompt-tag" onclick="fillPrompt('oldphoto')">📷 老照片修复</button>
+        </div>
         <textarea id="prompt" placeholder="输入图片描述，支持中英文"></textarea>
       </div>
 
@@ -911,6 +1060,58 @@
     </div>
   </div>
 
+  <!-- 老照片修复说明弹窗 -->
+  <div class="palmistry-modal" id="oldphotoModal">
+    <div class="palmistry-content">
+      <div class="palmistry-header">
+        <h4>📷 老照片修复操作说明</h4>
+        <button class="palmistry-close" onclick="closeOldphotoModal()">✕</button>
+      </div>
+      <div class="palmistry-body">
+        <p>请按照以下要求上传老照片，以获得最佳修复效果：</p>
+        <ul>
+          <li>尽量上传原图或高清扫描件</li>
+          <li>照片不要太小，建议分辨率不低于800x600</li>
+          <li>确保照片完整，不要裁剪掉重要部分</li>
+          <li>如果照片有严重破损，可以上传多张不同角度</li>
+          <li>彩色照片和黑白照片都可以修复</li>
+        </ul>
+        <div class="tip">
+          💡 提示：照片质量越好，修复效果越出色！
+        </div>
+      </div>
+      <div class="palmistry-footer">
+        <button class="palmistry-btn" onclick="confirmOldphoto()">我知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 手相说明弹窗 -->
+  <div class="palmistry-modal" id="palmistryModal">
+    <div class="palmistry-content">
+      <div class="palmistry-header">
+        <h4>🔮 手相分析操作说明</h4>
+        <button class="palmistry-close" onclick="closePalmistryModal()">✕</button>
+      </div>
+      <div class="palmistry-body">
+        <p>请按照以下要求上传掌纹图片，以获得最佳分析效果：</p>
+        <ul>
+          <li>拍摄时确保光线充足，避免阴影</li>
+          <li>手掌完全展开，手指自然分开</li>
+          <li>掌纹清晰可见，不要模糊</li>
+          <li>建议拍摄正面和侧面各一张</li>
+          <li>背景尽量简洁，避免杂乱</li>
+        </ul>
+        <div class="tip">
+          💡 提示：掌纹越清晰，AI分析结果越准确！
+        </div>
+      </div>
+      <div class="palmistry-footer">
+        <button class="palmistry-btn" onclick="confirmPalmistry()">我知道了</button>
+      </div>
+    </div>
+  </div>
+
   <div class="lightbox" id="lightbox">
     <div class="lb-header">
       <span id="lbInfo">Preview</span>
@@ -991,6 +1192,96 @@
       let currentLbUrl = ''; // 当前大图URL
       let currentImgIndex = -1; // 当前大图在所有图片中的索引
       let viewingFromHistory = false; // 标记是否从历史记录查看大图
+
+      // ====== 提示词模板 ======
+      const promptTemplates = {
+        palmistry: `请分析这张手相图片，详细解读：
+1. 生命线 - 健康状况和生命力
+2. 智慧线 - 思维方式和智力发展
+3. 感情线 - 情感生活和人际关系
+4. 事业线 - 职业发展和财运
+5. 婚姻线 - 婚姻状况
+请给出专业的手相分析结果。`,
+        beauty: `一位年轻美丽的亚洲女性，精致的五官，自然妆容，温柔的笑容，长发披肩，穿着时尚优雅，高清摄影，柔和的自然光线，背景虚化，专业人像摄影风格，8K超清画质`,
+        meituan: `美团外卖美食海报设计，诱人的美食特写，鲜艳的配色方案，红色和黄色的品牌色调，包含"美团外卖"字样，美食配送场景，高清美食摄影， appetizing food poster design, vibrant colors`,
+        landscape: `壮丽的自然风光，青山绿水，蓝天白云，日出或日落时分，金色的阳光洒在大地上，宁静的湖泊倒映着山峰，超广角镜头，8K高清，National Geographic风格`,
+        cartoon: `可爱的卡通风格插画，鲜艳的色彩，简洁的线条，Q版人物设计，温暖的配色方案，适合儿童读物或动画，矢量插画风格，高清晰度`,
+        oldphoto: `请修复这张老照片，要求：
+1. 去除划痕、污渍和破损
+2. 增强对比度和清晰度
+3. 恢复原有的色彩或进行智能上色（如果是黑白照片）
+4. 修复模糊部分，增强细节
+5. 保持照片原有的年代感和风格
+请输出修复后的高清照片。`
+      };
+
+      // 填充提示词
+      window.fillPrompt = (type) => {
+        const template = promptTemplates[type];
+        if (template) {
+          ui.prompt.value = template;
+          msg(`已加载「${getPromptName(type)}」提示词`);
+          
+          // 如果是手相，显示操作说明
+          if (type === 'palmistry') {
+            openPalmistryModal();
+          }
+          
+          // 如果是老照片修复，显示操作说明
+          if (type === 'oldphoto') {
+            openOldphotoModal();
+          }
+        }
+      };
+
+      // 获取提示词名称
+      function getPromptName(type) {
+        const names = {
+          palmistry: '手相分析',
+          beauty: '美女写真',
+          meituan: '美团海报',
+          landscape: '风景',
+          cartoon: '卡通',
+          oldphoto: '老照片修复'
+        };
+        return names[type] || type;
+      }
+
+      // 打开老照片修复说明弹窗
+      window.openOldphotoModal = () => {
+        const modal = document.getElementById('oldphotoModal');
+        if (modal) modal.classList.add('show');
+      };
+
+      // 关闭老照片修复说明弹窗
+      window.closeOldphotoModal = () => {
+        const modal = document.getElementById('oldphotoModal');
+        if (modal) modal.classList.remove('show');
+      };
+
+      // 确认老照片修复提示
+      window.confirmOldphoto = () => {
+        closeOldphotoModal();
+        msg('请上传需要修复的老照片');
+      };
+
+      // 打开手相说明弹窗
+      window.openPalmistryModal = () => {
+        const modal = document.getElementById('palmistryModal');
+        if (modal) modal.classList.add('show');
+      };
+
+      // 关闭手相说明弹窗
+      window.closePalmistryModal = () => {
+        const modal = document.getElementById('palmistryModal');
+        if (modal) modal.classList.remove('show');
+      };
+
+      // 确认手相提示
+      window.confirmPalmistry = () => {
+        closePalmistryModal();
+        msg('请上传清晰的掌纹图片');
+      };
 
       // ====== 初始化：加载缓存 ======
       ui.key.value = localStorage.getItem(STORE_KEY) || '';
